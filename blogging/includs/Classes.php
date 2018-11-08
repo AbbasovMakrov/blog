@@ -12,7 +12,7 @@ abstract  class functions
     {
         $upDir="../"."images"."/";
         $upFile=$name;
-        $extn=@end(explode('.',$upFile['name']));
+        $extn=end(explode('.',$upFile['name']));
         $AlowdedExtn=array("jpg","png","jpeg");
         $AlowdedMime=array("image/jpg","image/png","image/jpeg");
         $FinalName=$upDir."image-".rand(10,14*7754^44).".".$extn;
@@ -62,11 +62,24 @@ abstract  class functions
             echo $this->ShowError("Sorry you can't set post");
         }
     }
+    function getSalt() {
+        $charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/\\][{}\'";:?.>,<!@#$%^&*()-_=+|';
+        $randStringLen = 64;
 
+        $randString = "";
+        for ($i = 0; $i < $randStringLen; $i++) {
+            $randString .= $charset[mt_rand(0, strlen($charset) - 1)];
+        }
+
+        return $randString;
+    }
     function Hashing ($password,$cost=11)
     {
+
+        $salt=$this->getSalt();
         $options=array(
-            'cost'=>$cost
+            'cost'=>$cost,
+            'salt'=>$salt
         );
         $Hashed=password_hash($password,1,$options);
         return $Hashed;
